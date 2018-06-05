@@ -4,17 +4,17 @@
 
 1. [Introduction](README.md#introduction)
 
-2. [How to Compile](README.md#howto)
+2. [How to Compile](README.md#how-to-compile)
 
-3. [Layout of the Program](README.md#layout)
+3. [Layout of the Program](README.md#layout-of-the-program)
 
-4. [Benefits of Data Structures](#README.md#benefits)
+4. [Benefits of Data Structures](#README.md#benefits-of-data-structures)
 
-5. [Further Things to Optimize](#README.md#further)
+5. [Further Issues](#README.md#further-issues)
 
 # Introduction
 
-This is the Coding Challenge for the Data Engineering program from Insight. The source code folder includes the source and header files for the C++ program to solve the Edgar-Analytics Challenge. The abbreviation EDGAR stands for the Electronic Data and Gathering, Analysis and Retrieval system which was introduced by the Security and Exchange Commission (SEC). The aim is to write out inactive sessions in "real time" and to provide information about the duration of the session and the number of requested files.  
+This is repository of a program written by Don Vernekohl for the Coding Challenge of the Data Engineering program from Insight. The source code folder includes the source and header files for the C++ program to solve the Edgar-Analytics Challenge. The abbreviation EDGAR stands for the Electronic Data and Gathering, Analysis and Retrieval system which was introduced by the Security and Exchange Commission (SEC). The aim is to write out inactive sessions in "real time" and to provide information about the duration of the session and the number of requested files.  
 
 # How to Compile
 
