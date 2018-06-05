@@ -8,7 +8,7 @@
 
 3. [Layout of the Program](README.md#layout-of-the-program)
 
-4. [Benefits of Data Structures](README.md#benefits-of-data-structures)
+4. [Benefits of the Data Structures](README.md#benefits-of-the-data-structures)
 
 5. [Further Issues](README.md#further-issues)
 
