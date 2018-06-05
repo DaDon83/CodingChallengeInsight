@@ -14,7 +14,7 @@
 
 # Introduction
 
-This is repository of a program written by Don Vernekohl for the Coding Challenge of the Data Engineering program from Insight. The source code folder includes the source and header files for the C++ program to solve the Edgar-Analytics Challenge. The abbreviation EDGAR stands for the Electronic Data and Gathering, Analysis and Retrieval system which was introduced by the Security and Exchange Commission (SEC). The aim is to write out inactive sessions in "real time" and to provide information about the duration of the session and the number of requested files.  
+This is the repository of a program written by Don Vernekohl for the Coding Challenge of the Data Engineering program from Insight. The source code folder includes the source and header files for the C++ program to solve the Edgar-Analytics Challenge. The abbreviation EDGAR stands for the Electronic Data and Gathering, Analysis and Retrieval system which was introduced by the Security and Exchange Commission (SEC). The aim is to write out inactive sessions in "real time" and to provide information about the duration of the session and the number of requested files.  
 
 # How to Compile
 
