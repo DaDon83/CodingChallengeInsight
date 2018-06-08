@@ -45,6 +45,7 @@ The hash table allows finding the current node instantly based on its IP value k
 
 # Further Issues
 
+(Further issues solved in src_v2 folder)
 - The date processing needs to be upgraded to identify the different length of the months. The start year should be retrieved from the first line. This value is required to create a general purpose program.
 
 - A vector of strings is used at the end of the file to empty the buffer/Linked List. It is very inefficient to remove elements from the vector which are not at the end. Hence for very large buffers, it is better to use a linked list or a hash table.
