@@ -168,9 +168,9 @@ int main(int argc, char* argv[]) //argv holds the input and output files
                	}
 	}
 
-	delete head;  //clear heap
-	delete tail;
-	delete walker;	
+	//delete head;  //clear heap
+	//delete tail;
+	//delete walker;	
 	output_file.close();  //Close files  
 	csv_file.close();
 	inactivity_file.close();
