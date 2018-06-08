@@ -2,15 +2,18 @@
 
 using namespace std;
 
-DBLinkedList::DBLinkedList()
+
+uint month_days[] = {0,31,59,90,120,151,181,212,243,273,304,334};
+
+DBLinkedList::DBLinkedList()  //Constructor
 {
 }
 
-DBLinkedList::~DBLinkedList()
+DBLinkedList::~DBLinkedList()  //Deconstructor
 {
 }
 
-node* DBLinkedList::create_node(string ip, string start_d, string start_t)
+node* DBLinkedList::create_node(string ip, string start_d, string start_t) //Initialize Node 
 {
 	node *newOne = new node;
         newOne->ip = ip;
@@ -24,14 +27,14 @@ node* DBLinkedList::create_node(string ip, string start_d, string start_t)
         return newOne;
 }
 
-void DBLinkedList::first_entry(node* &head, node* &tail, string ip, string start_d, string start_t)
+void DBLinkedList::first_entry(node* &head, node* &tail, string ip, string start_d, string start_t)  //Set first Node and assign to head and tail
 {
         node *newOne = create_node(ip, start_d, start_t);
 	head = newOne;
         tail = newOne;
 }
 
-void DBLinkedList::add_new_entry(node* &head, string ip, string start_d, string start_t)
+void DBLinkedList::add_new_entry(node* &head, string ip, string start_d, string start_t)  //Insert new entry at the head of the linked list
 {
 	node *newOne = create_node(ip, start_d, start_t);
         newOne->next = head;
@@ -39,28 +42,14 @@ void DBLinkedList::add_new_entry(node* &head, string ip, string start_d, string 
 	head = newOne;
 }
 
-void DBLinkedList::delete_at_end(node* &tail)
+void DBLinkedList::delete_and_reinsert(node* n, node* &head, node* &tail, string stop_d, string stop_t)  //Remove node from the current position and insert it at the head. This happens it IP address reoccurs
 {
-	tail=tail->previous;
-	tail->next->next = NULL;
-        tail->next->ip ="";
-	tail->next->start_d="";
-        tail->next->start_t="";
-	tail->next->stop_d="";
-        tail->next->stop_t="";
-	tail->next->requests=0;
-	tail->next=NULL;
-}
-
-void DBLinkedList::delete_and_reinsert(node* n, node* &head, node* &tail, string stop_d, string stop_t)
-{
-	n->stop_d =stop_d; 
-	n->stop_t =stop_t;
-	n->requests++;
+	n->stop_d =stop_d;  //Update stop day
+	n->stop_t =stop_t;  //Update stop time;
+	n->requests++;  //Add a request
 	if(n->ip==head->ip) return;  //if node is already head node, the job is done
 	if(n->previous!=NULL&&n->next!=NULL) //Already at head of list or at end of list
 	{
-		//cout<<"Next node: "<<n->next->ip<<endl; 
 		n->previous->next=n->next;
 		n->next->previous=n->previous;
 		n->previous=NULL;
@@ -79,35 +68,23 @@ void DBLinkedList::delete_and_reinsert(node* n, node* &head, node* &tail, string
 	}
 }
 
-string DBLinkedList::extract_inactive_session(node* &head, node* &tail, int inactivity_period, string current_d, string current_t, string &ip_to_delete, int &time_of_arrival)
+string DBLinkedList::extract_inactive_session(node* &head, node* &tail, int inactivity_period, string current_d, string current_t, string &ip_to_delete, int &time_of_arrival)  //Extract content of node in output string format during file run
 {
-	if((get_time_in_seconds(current_t)-get_time_in_seconds(tail->stop_t)) > inactivity_period)
+	int sec = get_time_delay(tail->stop_d,tail->stop_t,current_d, current_t)-1;	 	
+	if(sec > inactivity_period)
 	{
-		int sec=0;
-		if(tail->start_t==tail->stop_t) 
-		{
-			sec=1;
-		}
-		else
-		{
-			sec=get_time_in_seconds(tail->stop_t)-get_time_in_seconds(tail->start_t)+1;
-		}
+		sec=get_time_delay(tail->start_d,tail->start_t,tail->stop_d,tail->stop_t);
 		string result=tail->ip+","+tail->start_d+" "+tail->start_t+","+tail->stop_d+" "+tail->stop_t+","+to_string(sec)+","+to_string(tail->requests);
 		ip_to_delete=tail->ip;
 		time_of_arrival=get_time_in_seconds(tail->start_t);
-		/*tail->ip="";
-		tail->start_d="";
-		tail->start_t="";
-		tail->stop_d="";
-		tail->stop_t="";
-		tail->requests=0;*/
 		if(tail->next!=NULL) tail->next=NULL;
 		if(tail->previous!=NULL)
 		{
 			tail=tail->previous;
 			tail->next=NULL;
 		}
-		else if(head!=NULL){
+		else if(head!=NULL) //Trick to release last element. Probably better solution available
+		{
 			head=NULL;
 			return result;
 		}	
@@ -120,40 +97,25 @@ string DBLinkedList::extract_inactive_session(node* &head, node* &tail, int inac
 	return "";
 }
 
-string DBLinkedList::extract_residual_sessions(node* &head, node* &tail,string &ip_to_delete,int &time_of_arrival)
+string DBLinkedList::extract_residual_sessions(node* &head, node* &tail,string &ip_to_delete,int &time_of_arrival)  //Extract content of node in output string format at the end of input file
 {
-        int sec=0;
-        if(tail->start_t==tail->stop_t)
-        {
-                sec=1;
-        }
-        else
-        {
-                sec=get_time_in_seconds(tail->stop_t)-get_time_in_seconds(tail->start_t)+1;
-        }
+        int sec=get_time_delay(tail->start_d,tail->start_t,tail->stop_d,tail->stop_t);
         string result=tail->ip+","+tail->start_d+" "+tail->start_t+","+tail->stop_d+" "+tail->stop_t+","+to_string(sec)+","+to_string(tail->requests);
         ip_to_delete=tail->ip;
         time_of_arrival=get_time_in_seconds(tail->start_t);
-        /*tail->ip="";
-        tail->start_d="";
-        tail->start_t="";
-        tail->stop_d="";
-        tail->stop_t="";
-        tail->requests=0;*/
         if(tail->next!=NULL) tail->next=NULL;
 	if(tail->previous!=NULL)
 	{
-		//cout<<"Prev "<<tail->ip<<endl;
 		tail=tail->previous;
 		tail->next=NULL;
 	}
-	else if(head!=NULL){
+	else if(head!=NULL)  //Trick to release last element. Probably better solution available
+	{
 		head=NULL;
 		return result;
 	}
 	else
 	{
-		//cout<<"Af "<<tail->ip<<endl;
 		tail=NULL;
 		return "";
 	}
@@ -163,16 +125,11 @@ string DBLinkedList::extract_residual_sessions(node* &head, node* &tail,string &
 
 
 
-void DBLinkedList::print_list(node* n)
+void DBLinkedList::print_list(node* n)   //for debugging
 {
 	while(n!=NULL)
         {
-                cout<<"Node IP: ";
                 print_node_IP(n);
-                cout<<endl;
-                cout<<"Node previous IP: ";
-                if(n->previous!=NULL) print_node_IP(n->previous);
-                cout<<endl;
                 n=n->next;
         }
         print_node_IP(n);
@@ -183,15 +140,62 @@ void DBLinkedList::print_node_IP(node* n)
 	if(n!=NULL) cout<<n->ip<<endl;
 }
 
-int DBLinkedList::get_time_in_seconds(string time_str){
-        istringstream time_ss(time_str);
+int DBLinkedList::get_time_in_seconds(string time_str)  //Convert time to comparable unit
+{ 
+        istringstream time_ss(time_str);  //use istringstream instead of stringstream to read numbers
         int hh,mm,ss;
         char dump1,dump2;
         time_ss>>hh>>dump1>>mm>>dump2>>ss;
         if(dump1!=':'&&dump2!=':') cerr<<"Time format is wrong"<<endl;
-        return hh*60*24+mm*60+ss;
+        return hh*60*60+mm*60+ss;
 }
 
+int DBLinkedList::get_date_in_days(string date_str)  //Convert date to comparable unit
+{
+        istringstream date_ss(date_str);
+        int yy,mm,dd;
+	int leapyears=0;
+        char dump1,dump2;
+        date_ss>>yy>>dump1>>mm>>dump2>>dd;
+        if(dump1!='-'&&dump2!='-') cerr<<"Date format is wrong"<<endl;
+        leapyears    = yy / 4;
+        if (yy % 4 == 0 && mm < 3)
+        {
+            // If this is a leap year
+            // And we have not passed Feburary then it does
+            // not count.....
+            leapyears   --;
+        }
+	
+	return yy*365+month_days[mm-1]+dd+leapyears;   
+}
 
+int DBLinkedList::get_time_delay(string start_d, string start_t, string stop_d, string stop_t)  //Calculate time between two events. Required to check if session is inactive and to calculate time of session for output
+{
+	int sec=0;
+	if(stop_d==start_d)
+	{
+		if(stop_t==start_t) 
+		{
+			sec=1;
+		}
+		else
+		{
+			sec=get_time_in_seconds(stop_t)-get_time_in_seconds(start_t)+1;		
+		}
+	}
+	else{
+		int days=get_date_in_days(stop_d)-get_date_in_days(start_d);           ////get number of days  !!!!!!!!!!!!!incorrect if month switch as not every month has 30 days
+		sec=86400-get_time_in_seconds(start_t)+get_time_in_seconds(stop_t);	//seconds on the first_day and last day
+		sec+=(days-1)*86400;   //add full days in between
+	}
+	return sec;
+}
+
+string DBLinkedList::get_node_content(node*n){
+	int sec=get_time_delay(n->start_d,n->start_t,n->stop_d,n->stop_t);
+        string result=n->ip+","+n->start_d+" "+n->start_t+","+n->stop_d+" "+n->stop_t+","+to_string(sec)+","+to_string(n->requests);
+	return result;
+}
 
 

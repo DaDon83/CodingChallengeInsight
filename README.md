@@ -21,7 +21,7 @@ This is the repository of a program written by Don Vernekohl for the Coding Chal
 The code uses the g++ compiler with standard libraries. A few functions require the C++11 standard libraries. The two source files "dbLinkedList.cpp" and "sessionization.cpp" require the header file "dbLinkedList.h" in the "src" folder.
 It compiles via terminal with:
 
-	g++ ./src/sessionization.cpp ./src/dbLinkedList.cpp --std=c++11 -o sessionization
+	g++ ./src_v2/sessionization.cpp ./src_v2/dbLinkedList.cpp --std=c++11 -o sessionization
 
 I used g++ version 5.5.0. The executable is sessionization. Run the excecutables with the following command:
 
@@ -51,3 +51,5 @@ The hash table allows finding the current node instantly based on its IP value k
 - A vector of strings is used at the end of the file to empty the buffer/Linked List. It is very inefficient to remove elements from the vector which are not at the end. Hence for very large buffers, it is better to use a linked list or a hash table.
 
 - The read_line function sorts the output vector when the required fields are not in order. In the base case, the fields are in order and there is no problem. If unordered fields are expected it would be a benefit if the read_header function determines the order of the fields instead of the read_line function.
+
+- Issue with v2: sort after reading the file is based on time and not date information

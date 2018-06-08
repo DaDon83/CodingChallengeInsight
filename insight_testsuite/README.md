@@ -5,3 +5,5 @@
    (https://www.sec.gov/dera/data/edgar-log-file-data-set.html)
    extracted with: head -90000 logXXXXXXXX.csv > log.csv
 3. Self written test with sessions on different days.
+4. Test time with leap year
+5. Test unordered columns
